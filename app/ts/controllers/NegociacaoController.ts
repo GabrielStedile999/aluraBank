@@ -1,11 +1,14 @@
-class NegociacaoController {
+import { NegociacoesView, MensagemView } from "../Views/index.js";
+import { Negociacoes, Negociacao } from "../Models/index.js";
+
+export class NegociacaoController {
 
     private _inputData: JQuery;
     private _inputQuantidade: JQuery;
     private _inputValor: JQuery;
     private _negocicacoes = new Negociacoes();
-    private _negociacoesView = new Views.NegociacoesView("#negociacoesView");
-    private _mensagemView = new Views.MensagemView("#mensagemView");
+    private _negociacoesView = new NegociacoesView("#negociacoesView");
+    private _mensagemView = new MensagemView("#mensagemView");
 
     constructor() {
 
