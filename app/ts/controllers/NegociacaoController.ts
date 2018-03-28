@@ -1,26 +1,30 @@
 import { NegociacoesView, MensagemView } from "../Views/index.js";
-import { Negociacoes, Negociacao } from "../Models/index.js";
+import { Negociacoes, Negociacao, NegociacaoParcial } from "../Models/index.js";
+import { domInject, throttle} from "../helpers/decorators/index.js";
+import { NegociacaoService} from "../services/index.js";
 
 export class NegociacaoController {
 
+    @domInject("#data")
     private _inputData: JQuery;
+
+    @domInject("#quantidade")
     private _inputQuantidade: JQuery;
+
+    @domInject("#valor")
     private _inputValor: JQuery;
     private _negocicacoes = new Negociacoes();
     private _negociacoesView = new NegociacoesView("#negociacoesView");
     private _mensagemView = new MensagemView("#mensagemView");
 
-    constructor() {
+    private _negociacaoService = new NegociacaoService();
 
-        this._inputData = $("#data");
-        this._inputQuantidade = $("#quantidade");
-        this._inputValor = $("#valor");
+    constructor() {
         this._negociacoesView.update(this._negocicacoes);
     }
 
-    adiciona(event: Event) {
-
-        event.preventDefault();
+    @throttle()
+    adiciona() {
 
         let data = new Date(this._inputData.val().toString().replace(/-/g, ","));
 
@@ -46,6 +50,26 @@ export class NegociacaoController {
     private _ehDiaUtil(data: Date) {
 
         return data.getDay() != DiaDaSemana.Sabado && data.getDay() != DiaDaSemana.Domingo;
+    }
+
+    @throttle()
+    importaDados() {
+
+        this._negociacaoService
+            .obterNegociacoes(res => {
+                if(res.ok) {
+                    return res;
+                } else {
+                    throw new Error(res.statusText);
+                }
+            })
+            .then(negociacoes => {
+
+                negociacoes.forEach(negociacao =>
+                    this._negocicacoes.adiciona(negociacao));
+
+                this._negociacoesView.update(this._negocicacoes);
+            });
     }
 }
 
