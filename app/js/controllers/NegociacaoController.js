@@ -1,4 +1,4 @@
-System.register(["../Views/index.js", "../Models/index.js", "../helpers/decorators/index.js", "../services/index.js"], function (exports_1, context_1) {
+System.register(["../Views/index.js", "../Models/index.js", "../helpers/decorators/index.js", "../services/index.js", "../helpers/index.js"], function (exports_1, context_1) {
     "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -7,7 +7,7 @@ System.register(["../Views/index.js", "../Models/index.js", "../helpers/decorato
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var __moduleName = context_1 && context_1.id;
-    var index_js_1, index_js_2, index_js_3, index_js_4, NegociacaoController, DiaDaSemana;
+    var index_js_1, index_js_2, index_js_3, index_js_4, index_js_5, NegociacaoController, DiaDaSemana;
     return {
         setters: [
             function (index_js_1_1) {
@@ -21,6 +21,9 @@ System.register(["../Views/index.js", "../Models/index.js", "../helpers/decorato
             },
             function (index_js_4_1) {
                 index_js_4 = index_js_4_1;
+            },
+            function (index_js_5_1) {
+                index_js_5 = index_js_5_1;
             }
         ],
         execute: function () {
@@ -40,6 +43,7 @@ System.register(["../Views/index.js", "../Models/index.js", "../helpers/decorato
                     }
                     const negociacao = new index_js_2.Negociacao(data, parseInt(this._inputQuantidade.val().toString()), parseFloat(this._inputValor.val().toString()));
                     this._negocicacoes.adiciona(negociacao);
+                    index_js_5.imprime(negociacao, this._negocicacoes);
                     this._negociacoesView.update(this._negocicacoes);
                     this._mensagemView.update("Negociação adicionada com sucesso!");
                 }
