@@ -55,30 +55,31 @@ export class NegociacaoController {
     }
 
     @throttle()
-    importaDados() {
+    async importaDados() {
+        try {
+            const negociacoesParaImportar = await this._negociacaoService
+                .obterNegociacoes(res => {
+                    if(res.ok) {
+                        return res;
+                    } else {
+                        throw new Error(res.statusText);
+                    }
+                });
 
-        this._negociacaoService
-            .obterNegociacoes(res => {
-                if(res.ok) {
-                    return res;
-                } else {
-                    throw new Error(res.statusText);
-                }
-            })
-            .then(negociacoesParaImportar => {
+            const negociacoesJaImportadas = this._negocicacoes.paraArray();
 
-                const negociacoesJaImportadas = this._negocicacoes.paraArray();
-
-                negociacoesParaImportar
-                    .filter(negociacao =>
-                        !negociacoesJaImportadas.some(jaImportadas =>
-                            negociacao.ehIgual(jaImportadas)))
-                    .forEach(negociacao =>
+            negociacoesParaImportar
+                .filter(negociacao =>
+                    !negociacoesJaImportadas.some(jaImportadas =>
+                        negociacao.ehIgual(jaImportadas)))
+                .forEach(negociacao =>
                     this._negocicacoes.adiciona(negociacao));
 
-                this._negociacoesView.update(this._negocicacoes);
-            })
-            .catch(err => this._mensagemView.update(err.message));
+            this._negociacoesView.update(this._negocicacoes);
+
+        } catch (err) {
+            this._mensagemView.update(err.message);
+        }
     }
 }
 
