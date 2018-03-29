@@ -1,9 +1,7 @@
 import { Negociacao } from "./Negociacao.js";
-import { Imprimivel } from "./Imprimivel.js";
-import { Igualavel} from "./Igualavel";
+import { MeuObjeto } from "./MeuObjeto.js";
 
-
-export class Negociacoes implements Imprimivel, Igualavel<Negociacoes> {
+export class Negociacoes implements MeuObjeto<Negociacoes> {
 
     private _negociacoes: Array<Negociacao> = [];
 

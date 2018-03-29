@@ -60,10 +60,14 @@ System.register(["../Views/index.js", "../Models/index.js", "../helpers/decorato
                             throw new Error(res.statusText);
                         }
                     })
-                        .then(negociacoes => {
-                        negociacoes.forEach(negociacao => this._negocicacoes.adiciona(negociacao));
+                        .then(negociacoesParaImportar => {
+                        const negociacoesJaImportadas = this._negocicacoes.paraArray();
+                        negociacoesParaImportar
+                            .filter(negociacao => !negociacoesJaImportadas.some(jaImportadas => negociacao.ehIgual(jaImportadas)))
+                            .forEach(negociacao => this._negocicacoes.adiciona(negociacao));
                         this._negociacoesView.update(this._negocicacoes);
-                    });
+                    })
+                        .catch(err => this._mensagemView.update(err.me));
                 }
             };
             __decorate([
